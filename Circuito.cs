@@ -8,16 +8,27 @@ namespace F1
 {
     class Circuito
     {
-        string Nombre { get; set; }
+        public string Nombre { get; set; }
         int Vueltas { get; set; }
         IMonoplaza? Monoplaza { get; set; }
 
-        Dictionary<IMonoplaza, long> Posiciones = new Dictionary<IMonoplaza, long>();     
+        Dictionary<string, long> Posiciones = new Dictionary<string, long>();     
 
-        public Circuito(string cNombre, int nVueltas)
+        public Circuito()
         {
-            Nombre = cNombre;
+            while (string.IsNullOrWhiteSpace(Nombre))
+            {
+                Console.Write("Nombre del circuito: ");
+                Nombre = Console.ReadLine();
+            }
+            int nVueltas = 0;
+            while (nVueltas == 0)
+            {
+                Console.Write("Cantidad de vueltas: ");
+                int.TryParse(Console.ReadLine(), out nVueltas);
+            }
             Vueltas = nVueltas;
+
         }
 
         public void AgregarMonoPlaza(IMonoplaza car)
@@ -41,13 +52,21 @@ namespace F1
             }
             else
             {
+                string nKeyMonoplaza = $"{this.Monoplaza.Escuderia} - {this.Monoplaza.Nombre}";
+                if (this.Posiciones.Any(p => p.Key == nKeyMonoplaza))
+                {
+                    Console.WriteLine($"Ya se ha realizado la prueba para este monoplaza ({nKeyMonoplaza})");
+                    return;
+                } 
+                
+
                 this.Monoplaza.Encender();
                 long nBestTime = 999999;
                 Console.WriteLine($"Iniciando prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
                 this.Monoplaza.Movimiento();
                 for (int i = 1; i <= this.Vueltas; i++)
                 {
-                    long nTime = new Random(i).Next(100000, 999999);
+                    long nTime = new Random(DateTime.Now.Second).Next(100000, 999999);
                     Console.WriteLine($"Vuelta {i} - Tiempo: {nTime}");
                     if (nTime < nBestTime)
                         nBestTime = nTime;
@@ -58,7 +77,7 @@ namespace F1
                 Console.WriteLine($"Mejor tiempo: {nBestTime}");
 
                 this.Monoplaza.Apagar();
-                this.Posiciones.Add(this.Monoplaza, nBestTime);
+                this.Posiciones.Add(nKeyMonoplaza, nBestTime);
             }
         }
 
@@ -73,7 +92,7 @@ namespace F1
             int nPos = 1;
             foreach (var item in this.Posiciones)
             {
-                Console.WriteLine($"{nPos}. {item.Key.Nombre.Trim().PadRight(20)} Tiempo:{item.Value}");
+                Console.WriteLine($"{nPos}. {item.Key.Trim().PadRight(30)} Tiempo:{item.Value}");
                 nPos++;
             }
         }
