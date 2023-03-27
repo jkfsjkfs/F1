@@ -10,9 +10,9 @@ namespace F1
     {
         string Nombre { get; set; }
         int Vueltas { get; set; }
-        Monoplaza Monoplaza { get; set; }
+        IMonoplaza Monoplaza { get; set; }
 
-        Dictionary<Monoplaza, long> Posiciones = new Dictionary<Monoplaza, long>();     
+        Dictionary<IMonoplaza, long> Posiciones = new Dictionary<IMonoplaza, long>();     
 
         public Circuito(string cNombre, int nVueltas)
         {
@@ -20,13 +20,13 @@ namespace F1
             Vueltas = nVueltas;
         }
 
-        public void AgregarMonoPlaza(Monoplaza car)
+        public void AgregarMonoPlaza(IMonoplaza car)
         {
             if (this.Monoplaza == null)
                 this.Monoplaza = car;
         }
 
-        public void SacarMonoPlaza(Monoplaza car)
+        public void SacarMonoPlaza()
         {
             if (this.Monoplaza != null)
                 this.Monoplaza = null;

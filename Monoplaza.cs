@@ -6,14 +6,26 @@ using System.Threading.Tasks;
 
 namespace F1
 {
-    abstract class Monoplaza
+
+    public enum Escuderias
+    {
+        McLaren, Ferrari, RedBull
+    }
+
+    public class McLaren:Monoplaza
+    {
+       public McLaren() { Escuderia = Escuderias.McLaren.ToString(); }     
+
+    }
+
+    public abstract class Monoplaza : IMonoplaza
     {
         public string Escuderia { get; set; }
         public string Nombre { get; set; }
         bool start, moving;
 
-        public void Encender() 
-        { 
+        public void Encender()
+        {
             if (!start)
             {
                 start = true;
@@ -23,7 +35,7 @@ namespace F1
                 Console.WriteLine($"El Vehiculo {Nombre} ya se encuentra encendido.");
         }
 
-        public void Apagar() 
+        public void Apagar()
         {
             if (start)
             {
@@ -39,7 +51,7 @@ namespace F1
                 Console.WriteLine($"El Vehiculo {Nombre} ya se encuentra apagado.");
         }
 
-        public void Detener() 
+        public void Detener()
         {
             if (start)
             {
@@ -53,10 +65,10 @@ namespace F1
             }
             else
                 Console.WriteLine($"El Vehiculo {Nombre} se encuentra apagado.");
-        
+
         }
 
-        public void Movimiento() 
+        public void Movimiento()
         {
             if (start)
             {
@@ -70,7 +82,27 @@ namespace F1
             }
             else
                 Console.WriteLine($"El Vehiculo {Nombre} se encuentra apagado.");
-        
+
+        }
+
+    }
+
+    public interface IMonoplaza
+    {
+        public string Escuderia { get; set; }
+        public string Nombre { get; set; }
+        public void Encender() { }
+
+        public void Apagar() { }
+
+        public void Detener() 
+        {
+           
+        }
+
+        public void Movimiento() 
+        {
+           
         }
 
     }
