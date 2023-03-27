@@ -9,10 +9,10 @@ namespace F1
     class Circuito
     {
         public string Nombre { get; set; }
-        int Vueltas { get; set; }
+        public int Vueltas { get; set; }
         IMonoplaza? Monoplaza { get; set; }
 
-        Dictionary<string, long> Posiciones = new Dictionary<string, long>();     
+        Dictionary<string, long> TablaResultados = new Dictionary<string, long>();     
 
         public Circuito()
         {
@@ -48,12 +48,12 @@ namespace F1
         {
             if (this.Monoplaza == null)
             {
-                Console.WriteLine($"NO hay un Monoplaza en el circuito");
+                Console.WriteLine($"         !!!***** NO hay un Monoplaza en el circuito *****!!!");
             }
             else
             {
                 string nKeyMonoplaza = $"{this.Monoplaza.Escuderia} - {this.Monoplaza.Nombre}";
-                if (this.Posiciones.Any(p => p.Key == nKeyMonoplaza))
+                if (this.TablaResultados.Any(p => p.Key == nKeyMonoplaza))
                 {
                     Console.WriteLine($"Ya se ha realizado la prueba para este monoplaza ({nKeyMonoplaza})");
                     return;
@@ -62,11 +62,13 @@ namespace F1
 
                 this.Monoplaza.Encender();
                 long nBestTime = 999999;
+                Console.WriteLine();
                 Console.WriteLine($"Iniciando prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
                 this.Monoplaza.Movimiento();
                 for (int i = 1; i <= this.Vueltas; i++)
                 {
-                    long nTime = new Random(DateTime.Now.Second).Next(100000, 999999);
+
+                    long nTime = new Random().Next(100000, 999999);
                     Console.WriteLine($"Vuelta {i} - Tiempo: {nTime}");
                     if (nTime < nBestTime)
                         nBestTime = nTime;
@@ -77,24 +79,40 @@ namespace F1
                 Console.WriteLine($"Mejor tiempo: {nBestTime}");
 
                 this.Monoplaza.Apagar();
-                this.Posiciones.Add(nKeyMonoplaza, nBestTime);
+                this.TablaResultados.Add(nKeyMonoplaza, nBestTime);
+                Console.WriteLine();
             }
         }
 
 
-        public void Finalizar()
+        public bool Finalizar()
         {
-            Console.WriteLine($"Circuito {this.Nombre} Finalizado.");
-            Console.WriteLine($"Tabla de Posiciones:");
-
-            this.Posiciones.OrderBy(p => p.Value);
-
-            int nPos = 1;
-            foreach (var item in this.Posiciones)
+            if (this.Monoplaza != null)
             {
-                Console.WriteLine($"{nPos}. {item.Key.Trim().PadRight(30)} Tiempo:{item.Value}");
-                nPos++;
+                Console.WriteLine($"         !!!***** Aún hay un Monoplaza en el circuito *****!!!");
+                return false;
             }
+
+            Console.WriteLine();
+            Console.WriteLine($"Circuito {this.Nombre} Finalizado.");
+            Console.WriteLine();
+            Console.WriteLine($"Tabla de Posiciones:");
+            var TablaPosiciones = TablaResultados.OrderBy(p => p.Value);
+            if (TablaPosiciones.Any())
+            {
+                Console.WriteLine("----------------------------------------------------------");
+                int nPos = 1;
+                foreach (var item in TablaPosiciones)
+                {
+                    Console.WriteLine($"| {nPos.ToString().PadRight(4)} | {item.Key.Trim().PadRight(30)} | Tiempo: {item.Value} |");
+                    Console.WriteLine("----------------------------------------------------------");
+                    nPos++;
+                }
+            }
+            else
+                Console.WriteLine(">> NO se realizó ninguna prueba en el circuito <<");
+
+            return true;
         }
     }
 }

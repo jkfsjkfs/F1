@@ -1,4 +1,6 @@
-﻿namespace F1
+﻿using System.ComponentModel.Design;
+
+namespace F1
 {
     internal class Program
     {
@@ -15,20 +17,21 @@
 
         static void MenuPpal()
         {
-            Console.Clear();
+            Console.WriteLine();
             Console.WriteLine();
             Console.WriteLine("************************");
-            Console.WriteLine("1. Crear Circuito");
+            Console.WriteLine("PRUEBAS MONOPLAZA F1");
+            Console.WriteLine("------------------------");
+            Console.WriteLine("1. Nuevo Circuito");
             Console.WriteLine("2. Salir");
             Console.WriteLine();
-            Console.WriteLine("Selecione una opción: ");
+            Console.Write("Selecione una opción: ");
 
             int nOpcion = 0;
             int.TryParse(Console.ReadLine(),out nOpcion);
             if (nOpcion == 0 || nOpcion > 2)
-            { 
-                Console.WriteLine("Opción NO válida. Presione una tecla para continuar... ");
-                Console.ReadKey();
+            {
+                Console.WriteLine("         !!!***** Opción NO válida. *****!!!");
                 MenuPpal();
             }
             else
@@ -48,23 +51,22 @@
 
         static void MenuCircuito(Circuito pCircuito)
         {
-            Console.Clear();
-            Console.WriteLine("********************************");
-            Console.WriteLine("CIRCUITO: " + pCircuito.Nombre);
-            Console.WriteLine("********************************");
+            Console.WriteLine();
+            Console.WriteLine("************************");
+            Console.WriteLine($"CIRCUITO: {pCircuito.Nombre} ({pCircuito.Vueltas} Vueltas)");
+            Console.WriteLine("------------------------");
             Console.WriteLine("1. Agregar Monoplaza");
             Console.WriteLine("2. Retirar Monoplaza");
             Console.WriteLine("3. Realizar Prueba");
             Console.WriteLine("4. Finalizar Circuito");
             Console.WriteLine();
-            Console.WriteLine("Selecione una opción: ");
+            Console.Write("Selecione una opción: ");
 
             int nOpcion = 0;
             int.TryParse(Console.ReadLine(), out nOpcion);
             if (nOpcion == 0 || nOpcion > 4)
             {
-                Console.WriteLine("Opción NO válida. Presione una tecla para continuar... ");
-                Console.ReadKey();
+                Console.WriteLine("         !!!***** Opción NO válida. *****!!!");
                 MenuCircuito(pCircuito);
             }
             else
@@ -73,6 +75,7 @@
                 {
                     case 1:
                         pCircuito.AgregarMonoPlaza(MenuMonoplaza());
+                        Console.Clear();
                         MenuCircuito(pCircuito);
                         break;
                     case 2:
@@ -81,15 +84,14 @@
                         break;
                     case 3:
                         pCircuito.RealizarPrueba();
-                        Console.WriteLine("Presione una tecla para volver al menu... ");
-                        Console.ReadKey();
                         MenuCircuito(pCircuito);
                         break;
                     case 4:
-                        pCircuito.Finalizar();
-                        Console.WriteLine("Presione una tecla para ir al menu Principal... ");
-                        Console.ReadKey();
-                        MenuPpal();
+                        if (pCircuito.Finalizar())
+                            MenuPpal();
+                        else
+                            MenuCircuito(pCircuito);
+
                         break;
                 }
             }
@@ -99,18 +101,19 @@
         static IMonoplaza MenuMonoplaza()
         {
             Console.Clear();
+            Console.WriteLine();
             Console.WriteLine("ESCUDERÍA: ");
             Console.WriteLine("1. McLaren");
             Console.WriteLine("2. Ferrari");
             Console.WriteLine("3. RedBull");
             Console.WriteLine();
+            Console.Write("Selecione una escudería: ");
 
             int nOpcion = 0;
             int.TryParse(Console.ReadLine(), out nOpcion);
             if (nOpcion == 0 || nOpcion > 3)
             {
-                Console.WriteLine("Opción NO válida. Presione una tecla para continuar... ");
-                Console.ReadKey();
+                Console.WriteLine("         !!!***** Opción NO válida. *****!!!");
                 return MenuMonoplaza();
             }
             else
@@ -127,9 +130,6 @@
                         return MenuMonoplaza();
                 }
             }
-
-
-            
         }
 
 
