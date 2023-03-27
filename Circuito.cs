@@ -10,7 +10,7 @@ namespace F1
     {
         string Nombre { get; set; }
         int Vueltas { get; set; }
-        IMonoplaza Monoplaza { get; set; }
+        IMonoplaza? Monoplaza { get; set; }
 
         Dictionary<IMonoplaza, long> Posiciones = new Dictionary<IMonoplaza, long>();     
 
@@ -33,25 +33,33 @@ namespace F1
         }
 
 
-        public void RealizarPrueba() 
+        public void RealizarPrueba()
         {
-            this.Monoplaza.Encender();
-            long nBestTime = 0;
-            Console.WriteLine($"Iniciando prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
-            this.Monoplaza.Movimiento();
-            for (int i = 1; i <= this.Vueltas; i++)
+            if (this.Monoplaza == null)
             {
-                long nTime = new Random(i).Next(100000, 999999);
-                Console.WriteLine($"Vuelta {i} - Tiempo: {nTime}");
-                if(nTime < nBestTime)
-                    nBestTime = nTime;
+                Console.WriteLine($"NO hay un Monoplaza en el circuito");
             }
+            else
+            {
+                this.Monoplaza.Encender();
+                long nBestTime = 999999;
+                Console.WriteLine($"Iniciando prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
+                this.Monoplaza.Movimiento();
+                for (int i = 1; i <= this.Vueltas; i++)
+                {
+                    long nTime = new Random(i).Next(100000, 999999);
+                    Console.WriteLine($"Vuelta {i} - Tiempo: {nTime}");
+                    if (nTime < nBestTime)
+                        nBestTime = nTime;
+                }
 
-            Console.WriteLine($"Finalizada prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
-            Console.WriteLine($"Mejor tiempo: {nBestTime}");
+                this.Monoplaza.Detener();
+                Console.WriteLine($"Finalizada prueba Monoplaza {this.Monoplaza.Nombre} - {this.Monoplaza.Escuderia}");
+                Console.WriteLine($"Mejor tiempo: {nBestTime}");
 
-            this.Monoplaza.Apagar();
-            this.Posiciones.Add(this.Monoplaza, nBestTime);
+                this.Monoplaza.Apagar();
+                this.Posiciones.Add(this.Monoplaza, nBestTime);
+            }
         }
 
 

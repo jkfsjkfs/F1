@@ -7,17 +7,6 @@ using System.Threading.Tasks;
 namespace F1
 {
 
-    public enum Escuderias
-    {
-        McLaren, Ferrari, RedBull
-    }
-
-    public class McLaren:Monoplaza
-    {
-       public McLaren() { Escuderia = Escuderias.McLaren.ToString(); }     
-
-    }
-
     public abstract class Monoplaza : IMonoplaza
     {
         public string Escuderia { get; set; }
@@ -87,23 +76,5 @@ namespace F1
 
     }
 
-    public interface IMonoplaza
-    {
-        public string Escuderia { get; set; }
-        public string Nombre { get; set; }
-        public void Encender() { }
-
-        public void Apagar() { }
-
-        public void Detener() 
-        {
-           
-        }
-
-        public void Movimiento() 
-        {
-           
-        }
-
-    }
+    
 }
